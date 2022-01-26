@@ -14,7 +14,7 @@ import { currentCountry } from "../Redux/Action";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-import Login from '../LoginRegister/Login'
+import Login from "../LoginRegister/Login";
 export default function MainPage() {
   const data = useSelector((state) => {
     return state;
@@ -44,46 +44,48 @@ export default function MainPage() {
   const [err, seterr] = useState("");
   // const Country2 = data.country
 
-  const logindata= localStorage.getItem('Login')
+  const logindata = localStorage.getItem("Login");
 
   const SendData = (e) => {
     e.preventDefault();
-    logindata? axios
-      .post("http://localhost:4000/insertdata", {
-        order_from_country: Country,
-        shipAddr: shipAddr,
-        shipTell: shipTell,
-        shipEmail: shipEmail,
-        shipPic: shipPic,
-        consAddr: consAddr,
-        consTell: consTell,
-        consEmail: consEmail,
-        consPic: consPic,
-        competition: competition,
-        volume: volume,
-        port_of_loading,
-        port_of_discharge,
-        final_destination,
-        comodities: comodities,
-        freight_term: freight_term,
-        remark: remark,
-      })
-      .then((res) => {
-        res.data.msg === "Data inserted"
-          ? toast.success(`${res.data.msg}`)
-          : toast.error(`${res.data}`);
-        console.log(res);
-      })
-      .catch((err) => console.log(err)) :
-      toast.error('Your not logged in', {
-        position: "top-center",
-        autoClose: 11000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: 0,
+    logindata
+      ? axios
+          .post("http://localhost:4000/insertdata", {
+            order_from_country: Country,
+            shipAddr: shipAddr,
+            shipTell: shipTell,
+            shipEmail: shipEmail,
+            shipPic: shipPic,
+            consAddr: consAddr,
+            consTell: consTell,
+            consEmail: consEmail,
+            consPic: consPic,
+            competition: competition,
+            volume: volume,
+            port_of_loading,
+            port_of_discharge,
+            final_destination,
+            comodities: comodities,
+            freight_term: freight_term,
+            remark: remark,
+          })
+          .then((res) => {
+            res.data.msg === "Data inserted"
+              ? toast.success(`${res.data.msg}`)
+              : toast.error(`${res.data}`);
+            console.log(res);
+          })
+          .catch((err) => console.log(err))
+          : toast.error("Your not logged in", {
+          position: "top-center",
+          autoClose: 11000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: 0,
         });
+        
   };
   useEffect(() => {
     axios
@@ -93,11 +95,10 @@ export default function MainPage() {
     dispatch(currentCountry({ setCountry, Country }));
   }, []);
 
-  function logout(){
-    localStorage.clear()
-    history('/loggedout')
-    
-  };
+  function logout() {
+    localStorage.clear();
+    history("/loggedout");
+  }
   // console.log(err);
   return (
     <div>
