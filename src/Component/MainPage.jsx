@@ -15,6 +15,10 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import Login from "../LoginRegister/Login";
+import Pdf from "../PDF/Pdf";
+import ReactDOMServer from "react-dom/server";
+
+
 export default function MainPage() {
   const data = useSelector((state) => {
     return state;
@@ -22,7 +26,15 @@ export default function MainPage() {
   const history = useNavigate();
 
   const dispatch = useDispatch();
-  console.log(data);
+
+  // const pdfviewer=(e)=>{
+  //   e.preventDefault()
+  //   <PDFDownloadLink>
+
+  //   </PDFDownloadLink>
+  // }
+
+  // console.log(data);
   const theme = createTheme();
   const [Country, setCountry] = useState("");
   const [shipAddr, setShipAddr] = useState("");
@@ -42,16 +54,43 @@ export default function MainPage() {
   const [freight_term, setFreight_term] = useState("");
   const [remark, setRemark] = useState("");
   const [err, seterr] = useState("");
+  const [pdfdata,allData]=useState('')
+  const [ip,setIp]=useState('')
+
   // const Country2 = data.country
+  
+  // console.log(pdfdata);
+  const pdfviewer=()=>{
+    const openWindow =window.open()
+    openWindow.document.write(  `<!DOCTYPE>
+    ${ReactDOMServer.renderToStaticMarkup(
+      <Pdf data={pdfdata} />
+    )}`)
+  }
 
   const logindata = localStorage.getItem("Login");
-
+  
+  const IPADDRESS= async()=>{
+    const res = await axios.get('https://api64.ipify.org')
+    // console.log(res.data);
+    await axios
+      .post("http://localhost:4000/location",{
+        ipAddr: res.data
+      })
+      .then((res) =>
+      setCountry(res)
+        // setCountry({ country: res.data.countryName, city: res.data.city })
+        // console.log(res)
+      )
+      .catch((err) => console.log(err));
+  }
+  console.log(Country);
   const SendData = (e) => {
     e.preventDefault();
     logindata
       ? axios
           .post("http://localhost:4000/insertdata", {
-            order_from_country: Country,
+            order_from_country: Country.data.Country,
             shipAddr: shipAddr,
             shipTell: shipTell,
             shipEmail: shipEmail,
@@ -73,10 +112,11 @@ export default function MainPage() {
             res.data.msg === "Data inserted"
               ? toast.success(`${res.data.msg}`)
               : toast.error(`${res.data}`);
-            console.log(res);
+            // console.log(res.data);
+            allData(res.data.data);
           })
           .catch((err) => console.log(err))
-          : toast.error("Your not logged in", {
+      : toast.error("Your not logged in", {
           position: "top-center",
           autoClose: 11000,
           hideProgressBar: false,
@@ -85,21 +125,16 @@ export default function MainPage() {
           draggable: true,
           progress: 0,
         });
-        
   };
   useEffect(() => {
-    axios
-      .get("https://api.db-ip.com/v2/free/self")
-      .then((res) => setCountry(res.data.countryName))
-      .catch((err) => console.log(err));
-    dispatch(currentCountry({ setCountry, Country }));
-  }, []);
+    IPADDRESS()
+  }, [shipAddr]);
 
   function logout() {
     localStorage.clear();
     history("/loggedout");
   }
-  // console.log(err);
+ 
   return (
     <div>
       <ThemeProvider theme={theme}>
@@ -119,7 +154,8 @@ export default function MainPage() {
         </Button>
 
         <Typography component="h1" variant="h5">
-          From {Country}
+          {/* From {`${Country.data?.Country},${Country.data?.City}`} */}
+          From {`${Country.data?.Country}`}
         </Typography>
         <Grid>
           <Box
@@ -132,7 +168,7 @@ export default function MainPage() {
             </Typography>
 
             <TextField
-              margin="normal"
+              // margin="small"
               required
               id="ShipAddr"
               label="Shipper Address"
@@ -142,7 +178,7 @@ export default function MainPage() {
               autoFocus
             />
             <TextField
-              margin="normal"
+              // margin="normal"
               required
               id="shipTell"
               label="Shipper Tellephone"
@@ -152,7 +188,7 @@ export default function MainPage() {
               autoFocus
             />
             <TextField
-              margin="normal"
+              // margin="normal"
               required
               id="shipEmail"
               label="Shipper Email"
@@ -162,7 +198,7 @@ export default function MainPage() {
               autoFocus
             />
             <TextField
-              margin="normal"
+              // margin="normal"
               required
               id="shipPic"
               label="Shipper PIC"
@@ -175,7 +211,7 @@ export default function MainPage() {
               CONSINGEE
             </Typography>
             <TextField
-              margin="normal"
+              // margin="normal"
               required
               id="consAddr"
               label="Consignee address"
@@ -185,7 +221,7 @@ export default function MainPage() {
               autoFocus
             />
             <TextField
-              margin="normal"
+              // margin="normal"
               required
               id="consTell"
               label="Consignee Tellephone"
@@ -195,7 +231,7 @@ export default function MainPage() {
               autoFocus
             />
             <TextField
-              margin="normal"
+              // margin="normal"
               required
               id="consEmail"
               label="Consignee Email"
@@ -205,7 +241,7 @@ export default function MainPage() {
               autoFocus
             />
             <TextField
-              margin="normal"
+              // margin="normal"
               required
               id="consPic"
               label="Consignee PIC"
@@ -218,7 +254,7 @@ export default function MainPage() {
               OTHER DETAILS
             </Typography>
             <TextField
-              margin="normal"
+              // margin="normal"
               required
               id="competition"
               label="Competition"
@@ -228,7 +264,7 @@ export default function MainPage() {
               autoFocus
             />
             <TextField
-              margin="normal"
+              // margin="normal"
               required
               id="volume"
               label="Volume"
@@ -238,7 +274,7 @@ export default function MainPage() {
               autoFocus
             />
             <TextField
-              margin="normal"
+              // margin="normal"
               required
               id="port_of_loading"
               label="Port of loading"
@@ -248,7 +284,7 @@ export default function MainPage() {
               autoFocus
             />
             <TextField
-              margin="normal"
+              // margin="normal"
               required
               id="port_of_discharge"
               label="Port of discharge"
@@ -258,7 +294,7 @@ export default function MainPage() {
               autoFocus
             />
             <TextField
-              margin="normal"
+              // margin="normal"
               required
               id="final_destination"
               label="Final destination"
@@ -268,7 +304,7 @@ export default function MainPage() {
               autoFocus
             />
             <TextField
-              margin="normal"
+              // margin="normal"
               required
               id="commodity"
               label="Commodity"
@@ -278,7 +314,7 @@ export default function MainPage() {
               autoFocus
             />
             <TextField
-              margin="normal"
+              // margin="normal"
               required
               id="freight"
               label="freight terms"
@@ -298,12 +334,14 @@ export default function MainPage() {
               style={{ width: 700, fontSize: "18px" }}
               onChange={(e) => setRemark(e.target.value)}
               autoFocus
+              required
             />
             <br />
             <Button type="submit" variant="outlined">
               ORDER
             </Button>
-            <Button variant="outlined">PDF</Button>
+            <Button variant="outlined" onClick={pdfviewer}>PDF</Button>
+
           </Box>
         </Grid>
       </ThemeProvider>

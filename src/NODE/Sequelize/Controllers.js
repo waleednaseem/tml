@@ -30,7 +30,13 @@ const Login = async (req, res) => {
         res.json({ msg: 'Wrong credentials ' })
     }
 }
-
+const findCountry=async(req,res)=>{
+        const ip = req.body.ipAddr
+        // const findLocation = geoip.lookup(`${ip}`)
+        const findLocation = await dbip(`${ip}`)
+        // console.log(findLocation)
+        res.send(findLocation)
+}
 const insertData = async (req, res) => {
     
 
@@ -88,5 +94,6 @@ const insertData = async (req, res) => {
 module.exports = {
     makeUser,
     Login,
-    insertData
+    insertData,
+    findCountry
 }

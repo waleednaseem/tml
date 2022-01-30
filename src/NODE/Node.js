@@ -14,6 +14,7 @@ App.use(express.json())
 App.post('/Register', ctrl.makeUser)
 App.post('/login',ctrl.Login)
 App.post('/insertdata',ctrl.insertData)
+App.post('/location',ctrl.findCountry)
 
 
 App.listen(port, () => {
