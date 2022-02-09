@@ -4,12 +4,13 @@ const jwt = require('jsonwebtoken')
 const geoip = require('geoip-lite')
 const ip = require('ip')
 const dbip = require('dbip')
-const dataInsert = require('./Model/dataInsert')
+// const dataInsert = require('./Model/dataInsert')
 
 
 
 const User = db.User
 const userData = db.userData
+
 const makeUser = async (req, res) => {
     const body = req.body
     await User.create(body)
@@ -20,9 +21,9 @@ const Login = async (req, res) => {
     const login = await User.findOne({ where: credentials })
 
     if (login) {
-        jwt.sign({ user: credentials }, 'secretKey', (err, token) => {
+        jwt.sign({ user: login }, 'secretKey', (err, token) => {
 
-            res.status(200).json({ msg: 'Logged in', token })
+            res.status(200).json({ msg: 'Logged in', token, login })
         })
 
     }
@@ -30,15 +31,15 @@ const Login = async (req, res) => {
         res.json({ msg: 'Wrong credentials ' })
     }
 }
-const findCountry=async(req,res)=>{
-        const ip = req.body.ipAddr
-        // const findLocation = geoip.lookup(`${ip}`)
-        const findLocation = await dbip(`${ip}`)
-        // console.log(findLocation)
-        res.send(findLocation)
+const findCountry = async (req, res) => {
+    const ip = req.body.ipAddr
+    // const findLocation = geoip.lookup(`${ip}`)
+    const findLocation = await dbip(`${ip}`)
+    // console.log(findLocation)
+    res.send(findLocation)
 }
 const insertData = async (req, res) => {
-    
+
 
     const data = {
         order_from_country: req.body.order_from_country,
@@ -58,6 +59,7 @@ const insertData = async (req, res) => {
         comodities: req.body.comodities,
         freight_term: req.body.freight_term,
         remark: req.body.remark,
+        dataID: req.body.dataID
     }
     const Cdata = {
         // order_from_country: req.body.order_from_country,
@@ -80,20 +82,30 @@ const insertData = async (req, res) => {
     }
 
     console.log(Cdata);
-    
-    const insertDatas=await userData.findOne({where:Cdata})
 
-    if(insertDatas){
+    const insertDatas = await userData.findOne({ where: Cdata })
+
+    if (insertDatas) {
         res.json(`Data is already inserted from ${insertDatas.order_from_country} at ${insertDatas.createdAt}`)
-    }else{
+    } else {
         await userData.create(data)
-        res.status(200).json({msg:'Data inserted', data})
+        res.status(200).json({ msg: 'Data inserted', data })
     }
     // res.send(insertDatas)
+}
+const AllData = async (req, res) => {
+    const data = await userData.findAll({})
+    res.send(data)
+}
+const searchConsignee = async (req, res) => {
+    const data = await userData.findAll({ where: { consPic: req.body.consPic } })
+    res.send(data)
 }
 module.exports = {
     makeUser,
     Login,
     insertData,
-    findCountry
+    findCountry,
+    AllData,
+    searchConsignee
 }

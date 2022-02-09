@@ -1,25 +1,103 @@
+// import * as React from 'react';
 import React, { useEffect, useState } from "react";
+import { styled, useTheme } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Drawer from "@mui/material/Drawer";
+import CssBaseline from "@mui/material/CssBaseline";
+import MuiAppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import List from "@mui/material/List";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import MailIcon from "@mui/icons-material/Mail";
 import { useSelector, useDispatch } from "react-redux";
 import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { TextareaAutosize } from "@mui/material";
 import { currentCountry } from "../Redux/Action";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate, Link } from "react-router-dom";
 import Login from "../LoginRegister/Login";
-import Pdf from "../PDF/Pdf";
+// import List from '@mui/material/List';
+// import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+// import ListItemIcon from '@mui/material/ListItemIcon';
 import ReactDOMServer from "react-dom/server";
+import jwt from "jwt-decode";
+import Dashboard from "./Dashboard";
 
+const drawerWidth = 240;
 
-export default function MainPage() {
+const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
+  ({ theme, open }) => ({
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: `-${drawerWidth}px`,
+    ...(open && {
+      transition: theme.transitions.create("margin", {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      marginLeft: 0,
+    }),
+  })
+);
+
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  transition: theme.transitions.create(["margin", "width"], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: `${drawerWidth}px`,
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
+}));
+
+const DrawerHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+  justifyContent: "flex-end",
+}));
+
+export default function MainPage(props) {
+  const theme = useTheme();
+  const [open, setOpen] = React.useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
   const data = useSelector((state) => {
     return state;
   });
@@ -27,117 +105,131 @@ export default function MainPage() {
 
   const dispatch = useDispatch();
 
-  // const pdfviewer=(e)=>{
-  //   e.preventDefault()
-  //   <PDFDownloadLink>
-
-  //   </PDFDownloadLink>
-  // }
-
-  // console.log(data);
-  const theme = createTheme();
   const [Country, setCountry] = useState("");
-  const [shipAddr, setShipAddr] = useState("");
-  const [shipTell, setShipTell] = useState("");
-  const [shipEmail, setShipEmail] = useState("");
-  const [shipPic, setShipPic] = useState("");
-  const [consAddr, setConsAddr] = useState("");
-  const [consTell, setConsTell] = useState("");
-  const [consEmail, setConsEmail] = useState("");
-  const [consPic, setConsPic] = useState("");
-  const [competition, setCompetition] = useState("");
-  const [volume, setVolume] = useState("");
-  const [port_of_loading, setport_of_loading] = useState("");
-  const [port_of_discharge, setport_of_discharge] = useState("");
-  const [final_destination, setFinal_destination] = useState("");
-  const [comodities, setComodities] = useState("");
-  const [freight_term, setFreight_term] = useState("");
-  const [remark, setRemark] = useState("");
-  const [err, seterr] = useState("");
-  const [pdfdata,allData]=useState('')
-  const [ip,setIp]=useState('')
-
-  // const Country2 = data.country
   
-  // console.log(pdfdata);
-  const pdfviewer=()=>{
-    const openWindow =window.open()
-    openWindow.document.write(  `<!DOCTYPE>
-    ${ReactDOMServer.renderToStaticMarkup(
-      <Pdf data={pdfdata} />
-    )}`)
-  }
 
-  const logindata = localStorage.getItem("Login");
-  
-  const IPADDRESS= async()=>{
-    const res = await axios.get('https://api64.ipify.org')
-    // console.log(res.data);
-    await axios
-      .post("http://localhost:4000/location",{
-        ipAddr: res.data
-      })
-      .then((res) =>
-      setCountry(res)
-        // setCountry({ country: res.data.countryName, city: res.data.city })
-        // console.log(res)
-      )
-      .catch((err) => console.log(err));
-  }
-  console.log(Country);
-  const SendData = (e) => {
-    e.preventDefault();
-    logindata
-      ? axios
-          .post("http://localhost:4000/insertdata", {
-            order_from_country: Country.data.Country,
-            shipAddr: shipAddr,
-            shipTell: shipTell,
-            shipEmail: shipEmail,
-            shipPic: shipPic,
-            consAddr: consAddr,
-            consTell: consTell,
-            consEmail: consEmail,
-            consPic: consPic,
-            competition: competition,
-            volume: volume,
-            port_of_loading,
-            port_of_discharge,
-            final_destination,
-            comodities: comodities,
-            freight_term: freight_term,
-            remark: remark,
-          })
-          .then((res) => {
-            res.data.msg === "Data inserted"
-              ? toast.success(`${res.data.msg}`)
-              : toast.error(`${res.data}`);
-            // console.log(res.data);
-            allData(res.data.data);
-          })
-          .catch((err) => console.log(err))
-      : toast.error("Your not logged in", {
-          position: "top-center",
-          autoClose: 11000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: 0,
-        });
+  const impData = async () => {
+    const logindata = localStorage.getItem("Login");
+    const DATA = jwt(logindata);
+    await dispatch({
+      type: "user_id",
+      payload: DATA?.user.id,
+    });
+
+    await dispatch({
+      type: "userdata",
+      payload: DATA?.user,
+    });
   };
   useEffect(() => {
-    IPADDRESS()
-  }, [shipAddr]);
+    impData();
+  }, [Country]);
+
+  // console.log(data.country);
+
+  const IPADDRESS = async () => {
+    const res = await axios.get("https://api64.ipify.org");
+    // console.log(res.data);
+    await axios
+      .post("http://localhost:4000/location", {
+        ipAddr: res.data,
+      })
+      .then(
+        (res) => setCountry(res),
+        await dispatch({
+          type: "country",
+          payload: Country.data?.Country,
+        })
+      )
+      .catch((err) => console.log(err));
+  };
+  // console.log(pdfdata);
+
+  useEffect(() => {
+    IPADDRESS();
+  }, [Country]);
 
   function logout() {
     localStorage.clear();
-    history("/loggedout");
+    history("/");
   }
- 
+
   return (
-    <div>
-      <ThemeProvider theme={theme}>
+    <Box sx={{ display: "flex" }}>
+      <CssBaseline />
+      <AppBar position="fixed" open={open}>
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            sx={{ mr: 2, ...(open && { display: "none" }) }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap component="div">
+            CRM
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: drawerWidth,
+            boxSizing: "border-box",
+          },
+        }}
+        variant="persistent"
+        anchor="left"
+        open={open}
+      >
+        <DrawerHeader>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === "ltr" ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
+          </IconButton>
+        </DrawerHeader>
+        <Divider />
+        <List>
+          <ListItem disablePadding>
+            <ListItemButton >
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <Link to='/'>dashboard</Link>
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton >
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <Link to='/history'>history</Link>
+            </ListItemButton>
+          </ListItem>
+        </List>
+        <Divider />
+
+        <Typography
+          component="h5"
+          variant="h6"
+          style={{ marginTop: "20px", marginBottom: "20px" }}
+        >
+          Location:{" "}
+          {`${Country.data?.Country ? Country.data?.Country : "Loading..."}`}
+        </Typography>
+        <Button variant="outlined" onClick={() => logout()}>
+          Log out
+        </Button>
+      </Drawer>
+      <Main open={open}>
+        <DrawerHeader />
         <ToastContainer
           position="top-right"
           autoClose={11000}
@@ -149,202 +241,8 @@ export default function MainPage() {
           draggable
           pauseOnHover
         />
-        <Button variant="outlined" onClick={() => logout()}>
-          Log out
-        </Button>
-
-        <Typography component="h1" variant="h5">
-          {/* From {`${Country.data?.Country},${Country.data?.City}`} */}
-          From {`${Country.data?.Country}`}
-        </Typography>
-        <Grid>
-          <Box
-            component="form"
-            onSubmit={SendData}
-            style={{ textAlign: "center", marginTop: "30px" }}
-          >
-            <Typography component="h4" variant="h5">
-              SHIPPER
-            </Typography>
-
-            <TextField
-              // margin="small"
-              required
-              id="ShipAddr"
-              label="Shipper Address"
-              name="ShipAddr"
-              autoComplete="ShipAddr"
-              onChange={(e) => setShipAddr(e.target.value)}
-              autoFocus
-            />
-            <TextField
-              // margin="normal"
-              required
-              id="shipTell"
-              label="Shipper Tellephone"
-              name="shipTell"
-              autoComplete="shipTell"
-              onChange={(e) => setShipTell(e.target.value)}
-              autoFocus
-            />
-            <TextField
-              // margin="normal"
-              required
-              id="shipEmail"
-              label="Shipper Email"
-              name="shipEmail"
-              autoComplete="shipEmail"
-              onChange={(e) => setShipEmail(e.target.value)}
-              autoFocus
-            />
-            <TextField
-              // margin="normal"
-              required
-              id="shipPic"
-              label="Shipper PIC"
-              name="shipPic"
-              autoComplete="shipPic"
-              onChange={(e) => setShipPic(e.target.value)}
-              autoFocus
-            />
-            <Typography component="h4" variant="h5">
-              CONSINGEE
-            </Typography>
-            <TextField
-              // margin="normal"
-              required
-              id="consAddr"
-              label="Consignee address"
-              name="consAddr"
-              autoComplete="consAddr"
-              onChange={(e) => setConsAddr(e.target.value)}
-              autoFocus
-            />
-            <TextField
-              // margin="normal"
-              required
-              id="consTell"
-              label="Consignee Tellephone"
-              name="consTell"
-              autoComplete="consTell"
-              onChange={(e) => setConsTell(e.target.value)}
-              autoFocus
-            />
-            <TextField
-              // margin="normal"
-              required
-              id="consEmail"
-              label="Consignee Email"
-              name="consEmail"
-              autoComplete="consEmail"
-              onChange={(e) => setConsEmail(e.target.value)}
-              autoFocus
-            />
-            <TextField
-              // margin="normal"
-              required
-              id="consPic"
-              label="Consignee PIC"
-              name="consPic"
-              autoComplete="consPic"
-              onChange={(e) => setConsPic(e.target.value)}
-              autoFocus
-            />
-            <Typography component="h4" variant="h5">
-              OTHER DETAILS
-            </Typography>
-            <TextField
-              // margin="normal"
-              required
-              id="competition"
-              label="Competition"
-              name="competition"
-              autoComplete="competition"
-              onChange={(e) => setCompetition(e.target.value)}
-              autoFocus
-            />
-            <TextField
-              // margin="normal"
-              required
-              id="volume"
-              label="Volume"
-              name="volume"
-              autoComplete="volume"
-              onChange={(e) => setVolume(e.target.value)}
-              autoFocus
-            />
-            <TextField
-              // margin="normal"
-              required
-              id="port_of_loading"
-              label="Port of loading"
-              name="port_of_loading"
-              autoComplete="port_of_loading"
-              onChange={(e) => setport_of_loading(e.target.value)}
-              autoFocus
-            />
-            <TextField
-              // margin="normal"
-              required
-              id="port_of_discharge"
-              label="Port of discharge"
-              name="port_of_discharge"
-              autoComplete="port_of_discharge"
-              onChange={(e) => setport_of_discharge(e.target.value)}
-              autoFocus
-            />
-            <TextField
-              // margin="normal"
-              required
-              id="final_destination"
-              label="Final destination"
-              name="final_destination"
-              autoComplete="final_destination"
-              onChange={(e) => setFinal_destination(e.target.value)}
-              autoFocus
-            />
-            <TextField
-              // margin="normal"
-              required
-              id="commodity"
-              label="Commodity"
-              name="commodity"
-              autoComplete="commodity"
-              onChange={(e) => setComodities(e.target.value)}
-              autoFocus
-            />
-            <TextField
-              // margin="normal"
-              required
-              id="freight"
-              label="freight terms"
-              name="freight"
-              autoComplete="freight"
-              onChange={(e) => setFreight_term(e.target.value)}
-              autoFocus
-            />
-
-            <Typography component="h4" variant="h5">
-              Remarks
-            </Typography>
-            <TextareaAutosize
-              aria-label="minimum height"
-              minRows={10}
-              placeholder="Remarks"
-              style={{ width: 700, fontSize: "18px" }}
-              onChange={(e) => setRemark(e.target.value)}
-              autoFocus
-              required
-            />
-            <br />
-            <Button type="submit" variant="outlined">
-              ORDER
-            </Button>
-            <Button variant="outlined" onClick={pdfviewer}>PDF</Button>
-
-          </Box>
-        </Grid>
-      </ThemeProvider>
-    </div>
+        {props.children}
+      </Main>
+    </Box>
   );
 }

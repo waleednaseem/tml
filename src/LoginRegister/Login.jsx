@@ -14,6 +14,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 // import Axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { LoginNow } from "../Redux/Action";
+import { useNavigate } from 'react-router'
 
 function Copyright(props) {
   return (
@@ -40,9 +41,17 @@ export default function SignInSide() {
   //   return state;
   // });
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   // console.log(data);
   const [name, setName] = useState("");
   const [password, setpassword] = useState("");
+
+  const login = () => {
+    dispatch(LoginNow({name,password}, (status) => {
+      // if(status)
+       navigate("/")
+    }))
+  }
   
   return (
     <ThemeProvider theme={theme}>
@@ -106,7 +115,7 @@ export default function SignInSide() {
               />
               <Button
                 // type="submit"
-                onClick={()=> dispatch(LoginNow({name,password}))}
+                onClick={login}
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
