@@ -153,14 +153,12 @@ export default function Pdf({ data }) {
           </div>
         </div>
       </div>
-        {/* <div style={{width:'100%'}}> */}
-          <h1 style={{ color: "navy" }}>
-            <b>REMARKS</b>
-          </h1>
-          <p style={{ marginTop: "26px", fontSize: "20px" }}>
-            <b>{data.remark}</b>
-          </p>
-        {/* </div> */}
+      <h1 style={{ color: "navy" }}>
+        <b>REMARKS</b>
+      </h1>
+      <p style={{ marginTop: "26px", fontSize: "20px" }}>
+        <b>{data.remark}</b>
+      </p>
     </div>
   );
 }
