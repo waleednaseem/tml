@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useSelector, useDispatch } from "react-redux";
 import { LoginNow } from "../Redux/Action";
 import { useNavigate } from 'react-router'
+import Image from '../Assets/company.jpg'
 
 function Copyright(props) {
   return (
@@ -24,9 +25,9 @@ function Copyright(props) {
       align="center"
       {...props}
     >
-      {"Copyright © "}
-      <Link color="inherit" href="https://Techintelligense.us/">
-        Techintelligense.us
+      {"© "}
+      <Link color="inherit" href="https://Techintelligense.us/" style={{textDecoration:'none'}}>
+        Techintelligense
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -63,7 +64,7 @@ export default function SignInSide() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: "url(https://source.unsplash.com/random)",
+            backgroundImage: `url(${Image})`,
             backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
               t.palette.mode === "light"
@@ -84,7 +85,7 @@ export default function SignInSide() {
             }}
           >
             <Typography component="h1" variant="h5">
-              Sign in
+              TML PVT LTD
             </Typography>
             <Box component="form" noValidate sx={{ mt: 1 }}>
               <TextField

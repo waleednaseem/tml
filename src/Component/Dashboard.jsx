@@ -318,7 +318,7 @@ export default function Dashboard() {
                   onChange={(e) => setFreight_term(e.target.value)}
                   autoFocus
                 />
-                <Typography component="h4" variant="h5" marginTop="10%">
+                <Typography component="h4" variant="h5" marginTop="5%">
                   Remarks
                 </Typography>
                 <TextareaAutosize

@@ -16,7 +16,8 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
+import LineStyleIcon from '@mui/icons-material/LineStyle';
+import HistoryIcon from '@mui/icons-material/History';
 import MailIcon from "@mui/icons-material/Mail";
 import { useSelector, useDispatch } from "react-redux";
 import Button from "@mui/material/Button";
@@ -33,11 +34,12 @@ import { useNavigate, Navigate, Link } from "react-router-dom";
 import Login from "../LoginRegister/Login";
 // import List from '@mui/material/List';
 // import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
+import ListItemButton from "@mui/material/ListItemButton";
 // import ListItemIcon from '@mui/material/ListItemIcon';
 import ReactDOMServer from "react-dom/server";
 import jwt from "jwt-decode";
 import Dashboard from "./Dashboard";
+import logo from '../Assets/logo.png'
 
 const drawerWidth = 240;
 
@@ -106,7 +108,6 @@ export default function MainPage(props) {
   const dispatch = useDispatch();
 
   const [Country, setCountry] = useState("");
-  
 
   const impData = async () => {
     const logindata = localStorage.getItem("Login");
@@ -168,8 +169,8 @@ export default function MainPage(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            CRM
+          <Typography variant="h4" noWrap component="div">
+            <img src={logo} alt="TML LOGO" height={70} />
           </Typography>
         </Toolbar>
       </AppBar>
@@ -197,21 +198,17 @@ export default function MainPage(props) {
         </DrawerHeader>
         <Divider />
         <List>
-          <ListItem disablePadding>
-            <ListItemButton >
-              <ListItemIcon>
-                <InboxIcon />
-              </ListItemIcon>
-              <Link to='/'>dashboard</Link>
-            </ListItemButton>
+          <ListItem  button onClick={() => history("/")}>
+            <ListItemIcon>
+              <LineStyleIcon />
+            </ListItemIcon>
+            <ListItemText primary='Dashboard'/>
           </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton >
-              <ListItemIcon>
-                <InboxIcon />
-              </ListItemIcon>
-              <Link to='/history'>history</Link>
-            </ListItemButton>
+          <ListItem  button onClick={() => history("/history")}>
+            <ListItemIcon>
+              <HistoryIcon />
+            </ListItemIcon>
+            <ListItemText primary='History'/>
           </ListItem>
         </List>
         <Divider />
@@ -223,6 +220,7 @@ export default function MainPage(props) {
         >
           Location:{" "}
           {`${Country.data?.Country ? Country.data?.Country : "Loading..."}`}
+        <img src={logo} alt="TML LOGO" width={220} />
         </Typography>
         <Button variant="outlined" onClick={() => logout()}>
           Log out

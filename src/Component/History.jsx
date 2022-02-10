@@ -18,6 +18,7 @@ import Typography from "@mui/material/Typography";
 import DownloadIcon from "@mui/icons-material/Download";
 import XLSX from "xlsx";
 import { useSelector, useDispatch } from "react-redux";
+import { height } from "@mui/system";
 // import { searchConsignee } from "../NODE/Sequelize/Controllers";
 
 export default function History() {
@@ -29,6 +30,7 @@ export default function History() {
   const [consignee, setconsignee] = useState(null);
   const [searching, setsearching] = useState(null);
 
+  // console.log(data)
   const handleOpen = (x) => {
     setOpen(true);
     console.log(x);
@@ -37,7 +39,7 @@ export default function History() {
   // useEffect(()=>{
   //   SearchAPI()
   // },[searchConsignee])
-  const okaydata = searching && handleOpen;
+  // const okaydata = searching && handleOpen;
   const searchConsignee = (e) => {
     e.preventDefault();
     axios
@@ -73,25 +75,32 @@ export default function History() {
       .then((res) => setData(res.data))
       .catch((err) => console.log(err));
   }, []);
-  const students = [
-    {
-      id: 1,
-      name: "waleed",
-      email: "email",
-      year: "2022",
-      fee: "3231",
-    },
-  ];
+  // const students = [
+  //   {
+  //     id: 1,
+  //     name: "waleed",
+  //     email: "email",
+  //     year: "2022",
+  //     fee: "3231",
+  //   },
+  // ];
   const ExcelDownload = (x) => {
-    // console.log(x);
-    // console.log(JSON.stringify(x));
-    // console.log(students);
+    // console.log(x.consPic)
     const worksheet = XLSX.utils.json_to_sheet([x]);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "downloadsheetnow");
     let buf = XLSX.write(workbook, { bookType: "xlsx", type: "buffer" });
     XLSX.write(workbook, { bookType: "xlsx", type: "binary" });
-    XLSX.writeFile(workbook, "download.xlsx");
+    XLSX.writeFile(workbook, `${x.comodities}_${x.consPic}.xlsx`);
+  };
+  const allExcelData = () => {
+    // console.log(data)
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "downloadsheetnow");
+    let buf = XLSX.write(workbook, { bookType: "xlsx", type: "buffer" });
+    XLSX.write(workbook, { bookType: "xlsx", type: "binary" });
+    XLSX.writeFile(workbook, "AllData.xlsx");
   };
 
   const emptyRows =
@@ -103,7 +112,7 @@ export default function History() {
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: 1100,
-    height:500,
+    height: 500,
     bgcolor: "background.paper",
     border: "2px solid #000",
     boxShadow: 54,
@@ -111,7 +120,7 @@ export default function History() {
   };
 
   return (
-    <Grid style={{ width: "100%" }}>
+    <Grid style={{ width: "1450px", height:'100px' }}>
       <Paper sx={{ width: "100%", marginTop: "-27px" }}>
         <Box
           component="form"
@@ -139,18 +148,24 @@ export default function History() {
             <Typography id="modal-modal-title" variant="h6" component="h2">
               {searching && `your( ${searching.length} ) Result Found`}
             </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 ,overflow: 'scroll',height:400}}>
+            <Typography
+              id="modal-modal-description"
+              sx={{ mt: 2, overflow: "scroll", height: 400 }}
+            >
               {searching &&
                 searching.map((x) => {
                   return (
                     <div
                       style={{
                         display: "flex",
-                        backgroundColor: "gray",
-                        color: "white",
-                        margin: 5
+                        backgroundColor: "#f0eeeb",
+                        color: "black",
+                        margin: 5,
+                        border:'1px solid white',
+                        borderRadius:20,
+                        padding:8,
+                        // paddingLeft:10
                       }}
-                      
                     >
                       {/* <div>Country</div> */}
                       {/* <div> */}
@@ -167,7 +182,7 @@ export default function History() {
                         <p>{x.competition}</p>
                       </div>
                       <div style={{ marginLeft: 20 }}>
-                      <h4>Consignee PIC</h4>
+                        <h4>Consignee PIC</h4>
                         <p>{x.consPic}</p>
                       </div>
                       <div style={{ marginLeft: 20 }}>
@@ -182,7 +197,7 @@ export default function History() {
                         <h4>Final Destination</h4>
                         <p>{x.final_destination}</p>
                       </div>
-                      
+
                       <div style={{ marginLeft: 20 }}>
                         <h4>Excel</h4>
                         <Button onClick={() => ExcelDownload(x)}>
@@ -286,9 +301,16 @@ export default function History() {
                   Remark
                 </TableCell>
                 <TableCell
-                  style={{ color: "white", backgroundColor: "orange" }}
+                  style={{
+                    color: "white",
+                    backgroundColor: "orange",
+                    display: "flex",
+                  }}
                 >
-                  <img src="https://img.icons8.com/material/48/000000/ms-excel--v1.png" />
+                  <Button onClick={() => allExcelData()}>
+                    <img src="https://img.icons8.com/material/48/000000/ms-excel--v1.png" />
+                    {/* <DownloadIcon /> */}
+                  </Button>
                 </TableCell>
               </TableRow>
             </TableHead>
