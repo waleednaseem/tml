@@ -24,7 +24,7 @@ import { height } from "@mui/system";
 export default function History() {
   const [page, setPage] = useState(0);
   const [data, setData] = useState([]);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(6);
   const [dense, setDense] = useState(false);
   const [open, setOpen] = useState(false);
   const [consignee, setconsignee] = useState(null);
@@ -102,6 +102,15 @@ export default function History() {
     XLSX.write(workbook, { bookType: "xlsx", type: "binary" });
     XLSX.writeFile(workbook, "AllData.xlsx");
   };
+  const searchedDataExcel = (x) => {
+    // console.log(x)
+    const worksheet = XLSX.utils.json_to_sheet(x);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "downloadsheetnow");
+    let buf = XLSX.write(workbook, { bookType: "xlsx", type: "buffer" });
+    XLSX.write(workbook, { bookType: "xlsx", type: "binary" });
+    XLSX.writeFile(workbook, "SerachedData.xlsx");
+  };
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
@@ -120,7 +129,7 @@ export default function History() {
   };
 
   return (
-    <Grid style={{ width: "1450px", height:'100px' }}>
+    <Grid style={{ width: "1450px", height:'500px' }}>
       <Paper sx={{ width: "100%", marginTop: "-27px" }}>
         <Box
           component="form"
@@ -146,7 +155,9 @@ export default function History() {
         >
           <Box sx={style}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
-              {searching && `your( ${searching.length} ) Result Found`}
+              {searching && `your( ${searching.length} ) Result Found `}
+              
+              <Button onClick={()=> searchedDataExcel(searching)}>Download your searched data </Button>
             </Typography>
             <Typography
               id="modal-modal-description"
@@ -199,8 +210,8 @@ export default function History() {
                       </div>
 
                       <div style={{ marginLeft: 20 }}>
-                        <h4>Excel</h4>
-                        <Button onClick={() => ExcelDownload(x)}>
+                        <img src="https://img.icons8.com/material/48/000000/ms-excel--v1.png" />
+                        <Button onClick={() => ExcelDownload(x)} style={{marginTop:16}}>
                           <DownloadIcon />
                         </Button>
                       </div>
@@ -358,7 +369,7 @@ export default function History() {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 7, 10, 14, 20, 50, 80, 100]}
+          rowsPerPageOptions={[6, 10, 14, 20, 50, 80, 100]}
           component="div"
           count={data.length}
           rowsPerPage={rowsPerPage}

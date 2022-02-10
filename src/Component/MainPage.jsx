@@ -170,7 +170,7 @@ export default function MainPage(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h4" noWrap component="div">
-            <img src={logo} alt="TML LOGO" height={70} />
+            <img src={logo} alt="TML LOGO" height={60} />
           </Typography>
         </Toolbar>
       </AppBar>
