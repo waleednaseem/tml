@@ -16,6 +16,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { LoginNow } from "../Redux/Action";
 import { useNavigate } from 'react-router'
 import Image from '../Assets/company.jpg'
+import logo from '../Assets/logo.png'
 
 function Copyright(props) {
   return (
@@ -85,7 +86,7 @@ export default function SignInSide() {
             }}
           >
             <Typography component="h1" variant="h5">
-              TML PVT LTD
+              <img src={logo} alt="TML LOGO" height={200} />
             </Typography>
             <Box component="form" noValidate sx={{ mt: 1 }}>
               <TextField
