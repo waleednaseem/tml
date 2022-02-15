@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import Grid from "@mui/material/Grid";
 import Pdf from "../PDF/Pdf";
@@ -36,6 +36,24 @@ export default function Dashboard() {
   const [err, seterr] = useState("");
   const [pdfdata, allData] = useState("");
   const [ip, setIp] = useState("");
+
+  const { ConstantValues } = useRef(null);
+  const ConstanShipAddr = useRef(null);
+  const ConstantshipTell = useRef(null);
+  const ConstantshipEmail = useRef(null);
+  const ConstantshipPic = useRef(null);
+  const ConstantconsAddr = useRef(null);
+  const ConstantconsTell = useRef(null);
+  const ConstantconsEmail = useRef(null);
+  const ConstantconsPic = useRef(null);
+  const Constantcompetition = useRef(null);
+  const Constantvolume = useRef(null);
+  const Constantport_of_loading = useRef(null);
+  const Constantport_of_discharge = useRef(null);
+  const Constantfinal_destination = useRef(null);
+  const ConstantCommodity = useRef(null);
+  const Constantfreight = useRef(null);
+  const ConstantRemark = useRef(null);
 
   const logindata = localStorage.getItem("Login");
 
@@ -76,7 +94,24 @@ export default function Dashboard() {
             res.data.msg === "Data inserted"
               ? toast.success(`${res.data.msg}`)
               : toast.error(`${res.data}`);
+
             allData(res.data.data);
+            ConstanShipAddr.current.value = "";
+            ConstantshipTell.current.value = "";
+            ConstantshipEmail.current.value = "";
+            ConstantshipPic.current.value = "";
+            ConstantconsAddr.current.value = "";
+            ConstantconsTell.current.value = "";
+            ConstantconsEmail.current.value = "";
+            ConstantconsPic.current.value = "";
+            Constantcompetition.current.value = "";
+            Constantvolume.current.value = "";
+            Constantport_of_loading.current.value = "";
+            Constantport_of_discharge.current.value = "";
+            Constantfinal_destination.current.value = "";
+            ConstantCommodity.current.value = "";
+            Constantfreight.current.value = "";
+            ConstantRemark.current.value = "";
           })
           .catch((err) => console.log(err))
       : toast.error("Your not logged in", {
@@ -89,6 +124,10 @@ export default function Dashboard() {
           progress: 0,
         });
   };
+  // const clicked=()=>{
+  //   // e.setShipPic("");
+  //   console.log('clicked')
+  // }
 
   return (
     <div>
@@ -105,6 +144,7 @@ export default function Dashboard() {
               </Typography>
 
               <TextField
+                inputRef={ConstanShipAddr}
                 variant="standard"
                 style={{ margin: "10px" }}
                 required
@@ -112,10 +152,12 @@ export default function Dashboard() {
                 label="Shipper Address"
                 name="ShipAddr"
                 autoComplete="ShipAddr"
+                // Value={shipAddr}
                 onChange={(e) => setShipAddr(e.target.value)}
                 autoFocus
               />
               <TextField
+                inputRef={ConstantshipTell}
                 style={{ margin: "10px" }}
                 variant="standard"
                 // margin="normal"
@@ -128,6 +170,7 @@ export default function Dashboard() {
                 autoFocus
               />
               <TextField
+                inputRef={ConstantshipEmail}
                 style={{ margin: "10px" }}
                 variant="standard"
                 // margin="normal"
@@ -140,6 +183,7 @@ export default function Dashboard() {
                 autoFocus
               />
               <TextField
+                inputRef={ConstantshipPic}
                 style={{ margin: "10px" }}
                 variant="standard"
                 // margin="normal"
@@ -157,6 +201,7 @@ export default function Dashboard() {
                 CONSINGEE
               </Typography>
               <TextField
+                inputRef={ConstantconsAddr}
                 style={{ margin: "10px" }}
                 variant="standard"
                 // margin="normal"
@@ -169,6 +214,7 @@ export default function Dashboard() {
                 autoFocus
               />
               <TextField
+                inputRef={ConstantconsTell}
                 style={{ margin: "10px" }}
                 variant="standard"
                 // margin="normal"
@@ -181,6 +227,7 @@ export default function Dashboard() {
                 autoFocus
               />
               <TextField
+                inputRef={ConstantconsEmail}
                 style={{ margin: "10px" }}
                 variant="standard"
                 // margin="normal"
@@ -193,6 +240,7 @@ export default function Dashboard() {
                 autoFocus
               />
               <TextField
+                inputRef={ConstantconsPic}
                 style={{ margin: "10px" }}
                 variant="standard"
                 // margin="normal"
@@ -211,6 +259,7 @@ export default function Dashboard() {
                   OTHER DETAILS
                 </Typography>
                 <TextField
+                  inputRef={Constantcompetition}
                   style={{ margin: "10px" }}
                   variant="standard"
                   // margin="normal"
@@ -223,6 +272,7 @@ export default function Dashboard() {
                   autoFocus
                 />
                 <TextField
+                  inputRef={Constantvolume}
                   style={{ margin: "10px" }}
                   variant="standard"
                   // margin="normal"
@@ -235,6 +285,7 @@ export default function Dashboard() {
                   autoFocus
                 />
                 <TextField
+                  inputRef={Constantport_of_loading}
                   style={{ margin: "10px" }}
                   variant="standard"
                   // margin="normal"
@@ -246,7 +297,9 @@ export default function Dashboard() {
                   onChange={(e) => setport_of_loading(e.target.value)}
                   autoFocus
                 />
+
                 <TextField
+                  inputRef={Constantport_of_discharge}
                   style={{ margin: "10px" }}
                   variant="standard"
                   // margin="normal"
@@ -259,30 +312,7 @@ export default function Dashboard() {
                   autoFocus
                 />
                 <TextField
-                  style={{ margin: "10px" }}
-                  variant="standard"
-                  // margin="normal"
-                  required
-                  id="port_of_loading"
-                  label="Port of loading"
-                  name="port_of_loading"
-                  autoComplete="port_of_loading"
-                  onChange={(e) => setport_of_loading(e.target.value)}
-                  autoFocus
-                />
-                <TextField
-                  style={{ margin: "10px" }}
-                  variant="standard"
-                  // margin="normal"
-                  required
-                  id="port_of_discharge"
-                  label="Port of discharge"
-                  name="port_of_discharge"
-                  autoComplete="port_of_discharge"
-                  onChange={(e) => setport_of_discharge(e.target.value)}
-                  autoFocus
-                />
-                <TextField
+                  inputRef={Constantfinal_destination}
                   style={{ margin: "10px" }}
                   variant="standard"
                   // margin="normal"
@@ -295,6 +325,7 @@ export default function Dashboard() {
                   autoFocus
                 />
                 <TextField
+                  inputRef={ConstantCommodity}
                   style={{ margin: "10px" }}
                   variant="standard"
                   // margin="normal"
@@ -307,6 +338,7 @@ export default function Dashboard() {
                   autoFocus
                 />
                 <TextField
+                  inputRef={Constantfreight}
                   style={{ margin: "10px" }}
                   // margin="normal"
                   variant="standard"
@@ -323,6 +355,8 @@ export default function Dashboard() {
                 </Typography>
                 <TextareaAutosize
                   aria-label="minimum height"
+                  // variant="standard"
+                  inputRef={ConstantRemark}
                   minRows={10}
                   placeholder="Remarks"
                   style={{ width: 700, fontSize: "18px" }}
