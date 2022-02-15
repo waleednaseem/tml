@@ -353,13 +353,13 @@ export default function Dashboard() {
                 <Typography component="h4" variant="h5" marginTop="5%">
                   Remarks
                 </Typography>
-                <TextareaAutosize
-                  aria-label="minimum height"
-                  // variant="standard"
+                <TextField
+                  placeholder="Remark"
                   inputRef={ConstantRemark}
-                  minRows={10}
-                  placeholder="Remarks"
-                  style={{ width: 700, fontSize: "18px" }}
+                  multiline
+                  rows={8}
+                  maxRows={10}
+                  fullWidth
                   onChange={(e) => setRemark(e.target.value)}
                   autoFocus
                   required
