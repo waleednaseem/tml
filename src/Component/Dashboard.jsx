@@ -11,18 +11,20 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 import jwt from "jwt-decode";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 export default function Dashboard() {
-
+  const doc = new jsPDF();
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
@@ -32,29 +34,28 @@ export default function Dashboard() {
       fontSize: 14,
     },
   }));
-  
+
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    '&:nth-of-type(odd)': {
+    "&:nth-of-type(odd)": {
       backgroundColor: theme.palette.action.hover,
     },
     // hide last border
-    '&:last-child td, &:last-child th': {
+    "&:last-child td, &:last-child th": {
       border: 0,
     },
   }));
-  
+
   function createData(name, calories, fat, carbs, protein) {
     return { name, calories, fat, carbs, protein };
   }
-  
+
   const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
+    createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
+    createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
+    createData("Eclair", 262, 16.0, 24, 6.0),
+    createData("Cupcake", 305, 3.7, 67, 4.3),
+    createData("Gingerbread", 356, 16.0, 49, 3.9),
   ];
-  
 
   const data = useSelector((state) => {
     return state;
@@ -107,11 +108,47 @@ export default function Dashboard() {
   const history = useNavigate();
 
   const dispatch = useDispatch();
+  // const pdfviewer = () => {
+  //   // const openWindow = window.open();
+  //   // openWindow.document.write(`<!DOCTYPE>
+  //   //     ${ReactDOMServer.renderToStaticMarkup(<Pdf data={pdfdata} />)}`);
+
+  // };
   const pdfviewer = () => {
     // const openWindow = window.open();
     // openWindow.document.write(`<!DOCTYPE>
-    //     ${ReactDOMServer.renderToStaticMarkup(<Pdf data={pdfdata} />)}`);
-    <Pdf data={pdfdata}/>
+    //     ${ReactDOMServer.renderToStaticMarkup(<Pdf data={x} />)}`);
+    // console.log(x);
+    doc.autoTable({
+      bodyStyles:{minCellWidth: 80},
+      head: [["TML PVT LTD", "DETAILS"]],
+      body: [
+        ["SHIPPER NAME", `${pdfdata.shipName}`],
+        ["SHIPPER ADDRESS", `${pdfdata.shipAddr}`],
+        ["SHIPPER TELEPHONE", `${pdfdata.shipTell}`],
+        ["SHIPPER EMAIL", `${pdfdata.shipEmail}`],
+        ["SHIPPER PIC", `${pdfdata.shipPic}`],
+        ["CONSIGNEE NAME", `${pdfdata.consName}`],
+        ["CONSIGNEE ADDRESS", `${pdfdata.consAddr}`],
+        ["CONSIGNEE TELEPHONE", `${pdfdata.consTell}`],
+        ["CONSIGNEE EMAIL", `${pdfdata.consEmail}`],
+        ["CONSIGNEE PIC", `${pdfdata.consPic}`],
+        ["COMMODITY", `${pdfdata.comodities}`],
+        ["PORT OF LOADING", `${pdfdata.port_of_loading}`],
+        ["PORT OF DISCHARGE", `${pdfdata.port_of_discharge}`],
+        ["FINAL DESTINATION", `${pdfdata.final_destination}`],
+        ["FREIGHT TERMS", `${pdfdata.freight_term}`],
+        ["VOLUME", `${pdfdata.volume}`],
+        ["COMPETITOR", `${pdfdata.competition}`],
+        ["REMARKS", `${pdfdata.remark}`],
+      ]
+    }
+    // ,{
+    //   head: [["REMARK"]],
+    //   body:[[]]
+    // }
+    );
+    doc.save(`${pdfdata.consName}_${pdfdata.port_of_discharge}.pdf`);
   };
   // console.log(data.userdata.Username)
   const SendData = (e) => {
@@ -456,7 +493,6 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-          
         </Box>
       </Grid>
     </div>

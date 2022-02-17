@@ -127,6 +127,7 @@ export default function History() {
     //     ${ReactDOMServer.renderToStaticMarkup(<Pdf data={x} />)}`);
     console.log(x)
     doc.autoTable({
+      bodyStyles:{minCellWidth: 80},
       head: [['TML PVT LTD', 'DETAILS']],
       body: [
         ['SHIPPER NAME',`${x.shipName}`],
