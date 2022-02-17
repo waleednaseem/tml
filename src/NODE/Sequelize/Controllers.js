@@ -98,9 +98,9 @@ const insertData = async (req, res) => {
 }
 // const userinfo = await User.findOne({where:{id:req.body.id}})
 const history = async (req, res) => {
-    const admin = await User.findOne({ where: { Username: req.body.Username } })
-    const adminRole = await userData.findAll({})
-    const userRole = await userData.findAll({ where: { Username: req.body.Username } })
+    const admin = await User.findOne({ where: { Username: req.body.Username },order: [['createdAt', 'DESC']] })
+    const adminRole = await userData.findAll({order: [['createdAt', 'DESC']]})
+    const userRole = await userData.findAll({ where: { Username: req.body.Username },order: [['createdAt', 'DESC']] })
     
     admin.Username === 'admin' ? res.json(adminRole) : res.json(userRole)
 }

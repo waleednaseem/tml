@@ -78,7 +78,7 @@ module.exports = (Connection, DataTypes) => {
             allowNull: false
         },
         remark: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(6000),
             allowNull: false
         },
         createdAt: {

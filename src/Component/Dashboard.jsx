@@ -234,7 +234,7 @@ export default function Dashboard() {
               </Typography>
 
               <TextField
-                inputRef={ConstanShipName}
+                // inputRef={ConstanShipName}
                 variant="standard"
                 style={{ margin: "10px" }}
                 required
@@ -247,7 +247,7 @@ export default function Dashboard() {
                 autoFocus
               />
               <TextField
-                inputRef={ConstanShipAddr}
+                // inputRef={ConstanShipAddr}
                 variant="standard"
                 style={{ margin: "10px" }}
                 required
@@ -260,7 +260,7 @@ export default function Dashboard() {
                 autoFocus
               />
               <TextField
-                inputRef={ConstantshipTell}
+                // inputRef={ConstantshipTell}
                 style={{ margin: "10px" }}
                 variant="standard"
                 // margin="normal"
@@ -273,7 +273,7 @@ export default function Dashboard() {
                 autoFocus
               />
               <TextField
-                inputRef={ConstantshipEmail}
+                // inputRef={ConstantshipEmail}
                 style={{ margin: "10px" }}
                 variant="standard"
                 // margin="normal"
@@ -286,7 +286,7 @@ export default function Dashboard() {
                 autoFocus
               />
               <TextField
-                inputRef={ConstantshipPic}
+                // inputRef={ConstantshipPic}
                 style={{ margin: "10px" }}
                 variant="standard"
                 // margin="normal"
@@ -304,7 +304,7 @@ export default function Dashboard() {
                 CONSINGEE
               </Typography>
               <TextField
-                inputRef={ConstantconsName}
+                // inputRef={ConstantconsName}
                 style={{ margin: "10px" }}
                 variant="standard"
                 // margin="normal"
@@ -317,7 +317,7 @@ export default function Dashboard() {
                 autoFocus
               />
               <TextField
-                inputRef={ConstantconsAddr}
+                // inputRef={ConstantconsAddr}
                 style={{ margin: "10px" }}
                 variant="standard"
                 // margin="normal"
@@ -330,7 +330,7 @@ export default function Dashboard() {
                 autoFocus
               />
               <TextField
-                inputRef={ConstantconsTell}
+                // inputRef={ConstantconsTell}
                 style={{ margin: "10px" }}
                 variant="standard"
                 // margin="normal"
@@ -343,7 +343,7 @@ export default function Dashboard() {
                 autoFocus
               />
               <TextField
-                inputRef={ConstantconsEmail}
+                // inputRef={ConstantconsEmail}
                 style={{ margin: "10px" }}
                 variant="standard"
                 // margin="normal"
@@ -356,7 +356,7 @@ export default function Dashboard() {
                 autoFocus
               />
               <TextField
-                inputRef={ConstantconsPic}
+                // inputRef={ConstantconsPic}
                 style={{ margin: "10px" }}
                 variant="standard"
                 // margin="normal"
@@ -375,7 +375,7 @@ export default function Dashboard() {
                   OTHER DETAILS
                 </Typography>
                 <TextField
-                  inputRef={Constantcompetition}
+                  // inputRef={Constantcompetition}
                   style={{ margin: "10px" }}
                   variant="standard"
                   // margin="normal"
@@ -388,7 +388,7 @@ export default function Dashboard() {
                   autoFocus
                 />
                 <TextField
-                  inputRef={Constantvolume}
+                  // inputRef={Constantvolume}
                   style={{ margin: "10px" }}
                   variant="standard"
                   // margin="normal"
@@ -401,7 +401,7 @@ export default function Dashboard() {
                   autoFocus
                 />
                 <TextField
-                  inputRef={Constantport_of_loading}
+                  // inputRef={Constantport_of_loading}
                   style={{ margin: "10px" }}
                   variant="standard"
                   // margin="normal"
@@ -415,7 +415,7 @@ export default function Dashboard() {
                 />
 
                 <TextField
-                  inputRef={Constantport_of_discharge}
+                  // inputRef={Constantport_of_discharge}
                   style={{ margin: "10px" }}
                   variant="standard"
                   // margin="normal"
@@ -428,7 +428,7 @@ export default function Dashboard() {
                   autoFocus
                 />
                 <TextField
-                  inputRef={Constantfinal_destination}
+                  // inputRef={Constantfinal_destination}
                   style={{ margin: "10px" }}
                   variant="standard"
                   // margin="normal"
@@ -441,7 +441,7 @@ export default function Dashboard() {
                   autoFocus
                 />
                 <TextField
-                  inputRef={ConstantCommodity}
+                  // inputRef={ConstantCommodity}
                   style={{ margin: "10px" }}
                   variant="standard"
                   // margin="normal"
@@ -454,7 +454,7 @@ export default function Dashboard() {
                   autoFocus
                 />
                 <TextField
-                  inputRef={Constantfreight}
+                  // inputRef={Constantfreight}
                   style={{ margin: "10px" }}
                   // margin="normal"
                   variant="standard"
@@ -472,7 +472,7 @@ export default function Dashboard() {
                 <TextField
                   placeholder="Remark"
                   // variant="standard"
-                  inputRef={ConstantRemark}
+                  // inputRef={ConstantRemark}
                   multiline
                   rows={8}
                   maxRows={10}

@@ -16,8 +16,8 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import LineStyleIcon from '@mui/icons-material/LineStyle';
-import HistoryIcon from '@mui/icons-material/History';
+import LineStyleIcon from "@mui/icons-material/LineStyle";
+import HistoryIcon from "@mui/icons-material/History";
 import MailIcon from "@mui/icons-material/Mail";
 import { useSelector, useDispatch } from "react-redux";
 import Button from "@mui/material/Button";
@@ -39,7 +39,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ReactDOMServer from "react-dom/server";
 import jwt from "jwt-decode";
 import Dashboard from "./Dashboard";
-import logo from '../Assets/logo.png'
+import logo from "../Assets/logo.png";
 
 const drawerWidth = 240;
 
@@ -152,9 +152,11 @@ export default function MainPage(props) {
 
   function logout() {
     localStorage.clear();
-    history("/login");
+    history("/");
   }
-
+  const logindata = localStorage.getItem("Login");
+  const DATA = jwt(logindata);
+  // console.log(DATA.user.Username)
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -171,6 +173,9 @@ export default function MainPage(props) {
           </IconButton>
           <Typography variant="h4" noWrap component="div">
             <img src={logo} alt="TML LOGO" height={60} />
+          </Typography>
+          <Typography variant="h6" noWrap component="div">
+            Welcome! {DATA.user.Username}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -198,17 +203,17 @@ export default function MainPage(props) {
         </DrawerHeader>
         <Divider />
         <List>
-          <ListItem  button onClick={() => history("/")}>
+          <ListItem button onClick={() => history("/")}>
             <ListItemIcon>
               <LineStyleIcon />
             </ListItemIcon>
-            <ListItemText primary='Dashboard'/>
+            <ListItemText primary="Dashboard" />
           </ListItem>
-          <ListItem  button onClick={() => history("/history")}>
+          <ListItem button onClick={() => history("/history")}>
             <ListItemIcon>
               <HistoryIcon />
             </ListItemIcon>
-            <ListItemText primary='History'/>
+            <ListItemText primary="History" />
           </ListItem>
         </List>
         <Divider />
@@ -220,7 +225,7 @@ export default function MainPage(props) {
         >
           Location:{" "}
           {`${Country.data?.Country ? Country.data?.Country : "Loading..."}`}
-        <img src={logo} alt="TML LOGO" width={220} />
+          <img src={logo} alt="TML LOGO" width={220} />
         </Typography>
         <Button variant="outlined" onClick={() => logout()}>
           Log out

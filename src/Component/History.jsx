@@ -74,8 +74,8 @@ export default function History() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-  const userName=localStorage.getItem('Login')
-  const Names =jwt(userName)
+  const userName = localStorage.getItem("Login");
+  const Names = jwt(userName);
   // console.log(Names.user.Username)
   useEffect(() => {
     axios
@@ -112,11 +112,15 @@ export default function History() {
     XLSX.write(workbook, { bookType: "xlsx", type: "binary" });
     XLSX.writeFile(workbook, "AllData.xlsx");
   };
-  const searchedDataExcel = (x) => {
-    // console.log(x)
-    const worksheet = XLSX.utils.json_to_sheet(x);
+  const searchedDataExcel = (searching) => {
+    // console.log(searching)
+    const worksheet = XLSX.utils.json_to_sheet(searching);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "TML ORDER DETAILS FOR SEARCHED DATA");
+    XLSX.utils.book_append_sheet(
+      workbook,
+      worksheet,
+      "TML ORDER SEARCHED DATA"
+    );
     let buf = XLSX.write(workbook, { bookType: "xlsx", type: "buffer" });
     XLSX.write(workbook, { bookType: "xlsx", type: "binary" });
     XLSX.writeFile(workbook, "SerachedData.xlsx");
@@ -125,32 +129,32 @@ export default function History() {
     // const openWindow = window.open();
     // openWindow.document.write(`<!DOCTYPE>
     //     ${ReactDOMServer.renderToStaticMarkup(<Pdf data={x} />)}`);
-    console.log(x)
+    console.log(x);
     doc.autoTable({
-      bodyStyles:{minCellWidth: 80},
-      head: [['TML PVT LTD', 'DETAILS']],
+      bodyStyles: { minCellWidth: 80 },
+      head: [["TML PVT LTD", "DETAILS"]],
       body: [
-        ['SHIPPER NAME',`${x.shipName}`],
-        ['SHIPPER ADDRESS',`${x.shipAddr}`],
-        ['SHIPPER TELEPHONE',`${x.shipTell}`],
-        ['SHIPPER EMAIL',`${x.shipEmail}`],
-        ['SHIPPER PIC',`${x.shipPic}`],
-        ['CONSIGNEE NAME',`${x.consName}`],
-        ['CONSIGNEE ADDRESS',`${x.consAddr}`],
-        ['CONSIGNEE TELEPHONE',`${x.consTell}`],
-        ['CONSIGNEE EMAIL',`${x.consEmail}`],
-        ['CONSIGNEE PIC',`${x.consPic}`],
-        ['COMMODITY',`${x.comodities}`],
-        ['PORT OF LOADING',`${x.port_of_loading}`],
-        ['PORT OF DISCHARGE',`${x.port_of_discharge}`],
-        ['FINAL DESTINATION',`${x.final_destination}`],
-        ['FREIGHT TERMS',`${x.freight_term}`],
-        ['VOLUME',`${x.volume}`],
-        ['COMPETITOR',`${x.competition}`],
-        ['REMARKS',`${x.remark}`],
+        ["SHIPPER NAME", `${x.shipName}`],
+        ["SHIPPER ADDRESS", `${x.shipAddr}`],
+        ["SHIPPER TELEPHONE", `${x.shipTell}`],
+        ["SHIPPER EMAIL", `${x.shipEmail}`],
+        ["SHIPPER PIC", `${x.shipPic}`],
+        ["CONSIGNEE NAME", `${x.consName}`],
+        ["CONSIGNEE ADDRESS", `${x.consAddr}`],
+        ["CONSIGNEE TELEPHONE", `${x.consTell}`],
+        ["CONSIGNEE EMAIL", `${x.consEmail}`],
+        ["CONSIGNEE PIC", `${x.consPic}`],
+        ["COMMODITY", `${x.comodities}`],
+        ["PORT OF LOADING", `${x.port_of_loading}`],
+        ["PORT OF DISCHARGE", `${x.port_of_discharge}`],
+        ["FINAL DESTINATION", `${x.final_destination}`],
+        ["FREIGHT TERMS", `${x.freight_term}`],
+        ["VOLUME", `${x.volume}`],
+        ["COMPETITOR", `${x.competition}`],
+        ["REMARKS", `${x.remark}`],
       ],
-    })
-    doc.save(`${x.consName}_${x.port_of_discharge}.pdf`)
+    });
+    doc.save(`${x.consName}_${x.port_of_discharge}.pdf`);
   };
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
@@ -386,12 +390,12 @@ export default function History() {
                 </TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
+            <TableBody style={{maxHeight:'100px'}}>
               {data
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((x) => {
                   return (
-                    <TableRow hover key={x.id} style={{ color: "#313332" }}>
+                    <TableRow hover key={x.id} style={{ color: "#313332"}}>
                       <TableCell>{x.order_from_country}</TableCell>
                       <TableCell>{x.shipName}</TableCell>
                       <TableCell>{x.shipAddr}</TableCell>
@@ -410,7 +414,19 @@ export default function History() {
                       <TableCell>{x.final_destination}</TableCell>
                       <TableCell>{x.comodities}</TableCell>
                       <TableCell>{x.freight_term}</TableCell>
-                      <TableCell>{x.remark}</TableCell>
+                      <TableCell style={{
+                        display: 'block',
+                        width: '267px',
+                        height: '74px',
+                        whiteSpace:'nowrap',
+                        overflow:'hidden',
+                        textOverflow:'ellipsis'
+                        // white-space: nowrap;
+                        // overflow: hidden;
+                        // text-overflow: ellipsis;
+                      }}>
+                        {x.remark}
+                      </TableCell>
                       <TableCell>{x.createdAt}</TableCell>
                       <TableCell>
                         <Button onClick={() => pdfviewer(x)}>
