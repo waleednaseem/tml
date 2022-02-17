@@ -19,7 +19,12 @@ import DownloadIcon from "@mui/icons-material/Download";
 import XLSX from "xlsx";
 import { useSelector, useDispatch } from "react-redux";
 import { height } from "@mui/system";
-// import { searchConsignee } from "../NODE/Sequelize/Controllers";
+import ReactDOMServer from "react-dom/server";
+import Pdf from "../PDF/Pdf";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import jwt from "jwt-decode";
 
 export default function History() {
   const [page, setPage] = useState(0);
@@ -29,7 +34,7 @@ export default function History() {
   const [open, setOpen] = useState(false);
   const [consignee, setconsignee] = useState(null);
   const [searching, setsearching] = useState(null);
-
+  const doc = new jsPDF();
   // console.log(data)
   const handleOpen = (x) => {
     setOpen(true);
@@ -44,7 +49,7 @@ export default function History() {
     e.preventDefault();
     axios
       .post("http://localhost:4000/SearchByConsignee", {
-        consPic: consignee,
+        consName: consignee,
       })
       .then((res) => {
         setsearching(res.data);
@@ -56,7 +61,7 @@ export default function History() {
   const DATA = useSelector((state) => {
     return state;
   });
-  console.log(searching);
+  // console.log(DATA);
 
   const handleChangeDense = (event) => {
     setDense(event.target.checked);
@@ -69,9 +74,14 @@ export default function History() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+  const userName=localStorage.getItem('Login')
+  const Names =jwt(userName)
+  // console.log(Names.user.Username)
   useEffect(() => {
     axios
-      .post("http://localhost:4000/ShowAllData")
+      .post("http://localhost:4000/history", {
+        Username: Names.user.Username,
+      })
       .then((res) => setData(res.data))
       .catch((err) => console.log(err));
   }, []);
@@ -97,7 +107,7 @@ export default function History() {
     // console.log(data)
     const worksheet = XLSX.utils.json_to_sheet(data);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "downloadsheetnow");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "TML ORDER DETAILS");
     let buf = XLSX.write(workbook, { bookType: "xlsx", type: "buffer" });
     XLSX.write(workbook, { bookType: "xlsx", type: "binary" });
     XLSX.writeFile(workbook, "AllData.xlsx");
@@ -106,12 +116,41 @@ export default function History() {
     // console.log(x)
     const worksheet = XLSX.utils.json_to_sheet(x);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "downloadsheetnow");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "TML ORDER DETAILS FOR SEARCHED DATA");
     let buf = XLSX.write(workbook, { bookType: "xlsx", type: "buffer" });
     XLSX.write(workbook, { bookType: "xlsx", type: "binary" });
     XLSX.writeFile(workbook, "SerachedData.xlsx");
   };
-
+  const pdfviewer = (x) => {
+    // const openWindow = window.open();
+    // openWindow.document.write(`<!DOCTYPE>
+    //     ${ReactDOMServer.renderToStaticMarkup(<Pdf data={x} />)}`);
+    console.log(x)
+    doc.autoTable({
+      head: [['TML PVT LTD', 'DETAILS']],
+      body: [
+        ['SHIPPER NAME',`${x.shipName}`],
+        ['SHIPPER ADDRESS',`${x.shipAddr}`],
+        ['SHIPPER TELEPHONE',`${x.shipTell}`],
+        ['SHIPPER EMAIL',`${x.shipEmail}`],
+        ['SHIPPER PIC',`${x.shipPic}`],
+        ['CONSIGNEE NAME',`${x.consName}`],
+        ['CONSIGNEE ADDRESS',`${x.consAddr}`],
+        ['CONSIGNEE TELEPHONE',`${x.consTell}`],
+        ['CONSIGNEE EMAIL',`${x.consEmail}`],
+        ['CONSIGNEE PIC',`${x.consPic}`],
+        ['COMMODITY',`${x.comodities}`],
+        ['PORT OF LOADING',`${x.port_of_loading}`],
+        ['PORT OF DISCHARGE',`${x.port_of_discharge}`],
+        ['FINAL DESTINATION',`${x.final_destination}`],
+        ['FREIGHT TERMS',`${x.freight_term}`],
+        ['VOLUME',`${x.volume}`],
+        ['COMPETITOR',`${x.competition}`],
+        ['REMARKS',`${x.remark}`],
+      ],
+    })
+    doc.save(`${x.consName}_${x.port_of_discharge}.pdf`)
+  };
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
@@ -129,7 +168,7 @@ export default function History() {
   };
 
   return (
-    <Grid style={{ width: "1450px", height:'500px' }}>
+    <Grid style={{ width: "1450px", height: "500px" }}>
       <Paper sx={{ width: "100%", marginTop: "-27px" }}>
         <Box
           component="form"
@@ -156,8 +195,10 @@ export default function History() {
           <Box sx={style}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
               {searching && `your( ${searching.length} ) Result Found `}
-              
-              <Button onClick={()=> searchedDataExcel(searching)}>Download your searched data </Button>
+
+              <Button onClick={() => searchedDataExcel(searching)}>
+                Download your searched data{" "}
+              </Button>
             </Typography>
             <Typography
               id="modal-modal-description"
@@ -172,9 +213,9 @@ export default function History() {
                         backgroundColor: "#f0eeeb",
                         color: "black",
                         margin: 5,
-                        border:'1px solid white',
-                        borderRadius:20,
-                        padding:8,
+                        border: "1px solid white",
+                        borderRadius: 20,
+                        padding: 8,
                         // paddingLeft:10
                       }}
                     >
@@ -210,9 +251,13 @@ export default function History() {
                       </div>
 
                       <div style={{ marginLeft: 20 }}>
-                        <img src="https://img.icons8.com/material/48/000000/ms-excel--v1.png" />
-                        <Button onClick={() => ExcelDownload(x)} style={{marginTop:16}}>
-                          <DownloadIcon />
+                        {/* <img src="https://img.icons8.com/material/48/000000/ms-excel--v1.png" /> */}
+                        <h4>PDF file </h4>
+                        <Button
+                          onClick={() => pdfviewer(x)}
+                          style={{ marginTop: 16 }}
+                        >
+                          <PictureAsPdfIcon />
                         </Button>
                       </div>
                       {/* </div> */}
@@ -234,6 +279,11 @@ export default function History() {
                 <TableCell
                   style={{ color: "white", backgroundColor: "orange" }}
                 >
+                  Shipper Name
+                </TableCell>
+                <TableCell
+                  style={{ color: "white", backgroundColor: "orange" }}
+                >
                   Shipper Addr
                 </TableCell>
                 <TableCell
@@ -250,6 +300,11 @@ export default function History() {
                   style={{ color: "white", backgroundColor: "orange" }}
                 >
                   Shipper PIC
+                </TableCell>
+                <TableCell
+                  style={{ color: "white", backgroundColor: "orange" }}
+                >
+                  Consignee Name
                 </TableCell>
                 <TableCell
                   style={{ color: "white", backgroundColor: "orange" }}
@@ -312,6 +367,11 @@ export default function History() {
                   Remark
                 </TableCell>
                 <TableCell
+                  style={{ color: "white", backgroundColor: "orange" }}
+                >
+                  Time
+                </TableCell>
+                <TableCell
                   style={{
                     color: "white",
                     backgroundColor: "orange",
@@ -332,10 +392,12 @@ export default function History() {
                   return (
                     <TableRow hover key={x.id} style={{ color: "#313332" }}>
                       <TableCell>{x.order_from_country}</TableCell>
+                      <TableCell>{x.shipName}</TableCell>
                       <TableCell>{x.shipAddr}</TableCell>
                       <TableCell>{x.shipTell}</TableCell>
                       <TableCell>{x.shipEmail}</TableCell>
                       <TableCell>{x.shipPic}</TableCell>
+                      <TableCell>{x.consName}</TableCell>
                       <TableCell>{x.consAddr}</TableCell>
                       <TableCell>{x.consTell}</TableCell>
                       <TableCell>{x.consEmail}</TableCell>
@@ -348,9 +410,10 @@ export default function History() {
                       <TableCell>{x.comodities}</TableCell>
                       <TableCell>{x.freight_term}</TableCell>
                       <TableCell>{x.remark}</TableCell>
+                      <TableCell>{x.createdAt}</TableCell>
                       <TableCell>
-                        <Button onClick={() => ExcelDownload(x)}>
-                          <DownloadIcon />
+                        <Button onClick={() => pdfviewer(x)}>
+                          <PictureAsPdfIcon />
                         </Button>
                       </TableCell>
                     </TableRow>

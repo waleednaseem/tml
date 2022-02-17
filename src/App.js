@@ -14,6 +14,7 @@ import Dashboard from './Component/Dashboard';
 import Drawer from "@mui/material/Drawer";
 import { ToastContainer, toast } from "react-toastify";
 import { styled, useTheme } from "@mui/material/styles";
+import Pdf from "./PDF/Pdf";
 
 
 export default function App() {
@@ -70,6 +71,7 @@ export default function App() {
             <Routes>
               <Route exact path='/' element={<Dashboard />} />
               <Route path="/history" element={<History />} />
+              {/* <Route path="/pdf" element={<Pdf />} /> */}
             </Routes>
           </MainPage>
         )}

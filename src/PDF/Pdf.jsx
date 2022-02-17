@@ -1,164 +1,157 @@
-import React from "react";
+// import React from "react";
+import * as React from "react";
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 import "./pdf.css";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 // import { useNavigate } from 'react-router-dom';
 
 export default function Pdf({ data }) {
   // const history = useNavigate()
   console.log(data);
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    "&:last-child td, &:last-child th": {
+      border: 1,
+    },
+  }));
+  function createData(name, calories, fat, carbs, protein) {
+    return { name, calories, fat, carbs, protein };
+  }
+
+  const rows = [
+    createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
+    createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
+    createData("Eclair", 262, 16.0, 24, 6.0),
+    createData("Cupcake", 305, 3.7, 67, 4.3),
+    createData("Gingerbread", 356, 16.0, 49, 3.9),
+  ];
   return (
-    <div
-      style={{
-        backgroundColor: "#F2EFEF",
-        textAlign: "center",
-        paddingBottom: "30px",
-      }}
-    >
-      <div
-        style={{
-          width: "100%",
-          backgroundColor: "ECE8E8",
-          color: "navy",
-          display: "inline-flex",
-          paddingTop: "30px",
-          paddingBottom: "30px",
-        }}
-      >
-        <h1 style={{ width: "100%" }}>Records inserted</h1>
-      </div>
-      <div
-        style={{
-          alignItems: "center",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <h1 style={{ color: "gray" }}>country : {data.order_from_country}</h1>
-        <div
+    <Grid>
+      <Box>
+        {/* <div
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            // width: "60%",
-            justifyContent: "space-evenly",
+            backgroundColor: "#F2EFEF",
+            textAlign: "center",
+            paddingBottom: "30px",
           }}
         >
-          <div style={{ width: 300 }}>
-            <h2 style={{ color: "navy", textAlign: "left" }}>SHIPPER DETAIL</h2>
-            <div style={{ display: "flex" }}>
-              <h4 style={{ fontSize: "20px" }}>Shipper address : </h4>
-              <p style={{ marginTop: "26px", fontSize: "20px" }}>
-                {data.shipAddr}
-              </p>
-            </div>
-            <div style={{ display: "flex" }}>
-              <h4 style={{ fontSize: "20px" }}>Shipper tellephone :</h4>
-              <p style={{ marginTop: "26px", fontSize: "20px" }}>
-                {data.shipTell}
-              </p>
-            </div>
-            <div style={{ display: "flex" }}>
-              <h4 style={{ fontSize: "20px" }}>Shipper Email :</h4>
-              <p style={{ marginTop: "26px", fontSize: "20px" }}>
-                {data.shipEmail}
-              </p>
-            </div>
-            <div style={{ display: "flex" }}>
-              <h4 style={{ fontSize: "20px" }}>Shipper PIC :</h4>
-              <p style={{ marginTop: "26px", fontSize: "20px" }}>
-                {data.shipPic}
-              </p>
-            </div>
+          <div
+            style={{
+              width: "100%",
+              backgroundColor: "ECE8E8",
+              color: "navy",
+              display: "inline-flex",
+              paddingTop: "30px",
+              paddingBottom: "30px",
+            }}
+          >
+            <h1 style={{ width: "100%" }}>TML (PVT) LTD</h1>
           </div>
-          <div style={{ width: 300 }}>
-            <h2 style={{ color: "navy", textAlign: "left" }}>
-              CONSIGNEE DETAIL
-            </h2>
-            <div style={{ display: "flex" }}>
-              <h4 style={{ fontSize: "20px" }}>Consignee address : </h4>
-              <p style={{ marginTop: "26px", fontSize: "20px" }}>
-                {data.consAddr}
-              </p>
-            </div>
-            <div style={{ display: "flex" }}>
-              <h4 style={{ fontSize: "20px" }}>Consignee tellephone :</h4>
-              <p style={{ marginTop: "26px", fontSize: "20px" }}>
-                {data.consTell}
-              </p>
-            </div>
-            <div style={{ display: "flex" }}>
-              <h4 style={{ fontSize: "20px" }}>Consignee Email :</h4>
-              <p style={{ marginTop: "26px", fontSize: "20px" }}>
-                {data.consEmail}
-              </p>
-            </div>
-            <div style={{ display: "flex" }}>
-              <h4 style={{ fontSize: "20px" }}>Consignee PIC :</h4>
-              <p style={{ marginTop: "26px", fontSize: "20px" }}>
-                {data.consPic}
-              </p>
-            </div>
-          </div>
-        </div>
-        <h2 style={{ color: "navy", textAlign: "left" }}>OTHER DETAILS</h2>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            // width: "60%",
-            justifyContent: "space-evenly",
-          }}
-        >
-          <div style={{ width: 300 }}>
-            {/* <h4 style={{fontSize:'20px'}}>TERMS</h4> */}
-            <div style={{ display: "flex" }}>
-              <h4 style={{ fontSize: "20px" }}>Competition : </h4>
-              <p style={{ marginTop: "26px", fontSize: "20px" }}>
-                {data.competition}
-              </p>
-            </div>
-            <div style={{ display: "flex" }}>
-              <h4 style={{ fontSize: "20px" }}>Freight term :</h4>
-              <p style={{ marginTop: "26px", fontSize: "20px" }}>
-                {data.freight_term}
-              </p>
-            </div>
-            <div style={{ display: "flex" }}>
-              <h4 style={{ fontSize: "20px" }}>Volume :</h4>
-              <p style={{ marginTop: "26px", fontSize: "20px" }}>
-                {data.volume}
-              </p>
-            </div>
-          </div>
-          <div style={{ width: 300 }}>
-            {/* <h4 style={{fontSize:'20px'}}>LOADING</h4> */}
-            <div style={{ display: "flex" }}>
-              <h4 style={{ fontSize: "20px" }}>Port of Loading :</h4>
-              <p style={{ marginTop: "26px", fontSize: "20px" }}>
-                {data.port_of_loading}
-              </p>
-            </div>
-            <div style={{ display: "flex" }}>
-              <h4 style={{ fontSize: "20px" }}>Port of Discharge :</h4>
-              <p style={{ marginTop: "26px", fontSize: "20px" }}>
-                {data.port_of_discharge}
-              </p>
-            </div>
-            <div style={{ display: "flex" }}>
-              <h4 style={{ fontSize: "20px" }}>Final destination :</h4>
-              <p style={{ marginTop: "26px", fontSize: "20px" }}>
-                {data.final_destination}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <h1 style={{ color: "navy" }}>
-        <b>REMARKS</b>
-      </h1>
-      <p style={{ marginTop: "26px", fontSize: "20px" }}>
-        <b>{data.remark}</b>
-      </p>
-    </div>
+          <div
+            style={{
+              alignItems: "center",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <h1 style={{ color: "gray" }}>
+              country : {data.order_from_country}
+            </h1> */}
+
+            {/* <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 700 }} aria-label="customized table">
+              <TableBody>
+                <TableRow>
+                  <StyledTableCell align="left">Data :</StyledTableCell>
+                  <StyledTableCell align="left"></StyledTableCell>
+                  <StyledTableCell align="left"></StyledTableCell>
+                  <StyledTableCell align="left">
+                    this is my Data
+                  </StyledTableCell>
+                </TableRow>
+                <TableRow>
+                  <StyledTableCell align="left">
+                    Data record for my list :
+                  </StyledTableCell>
+                  <StyledTableCell align="left"></StyledTableCell>
+                  <StyledTableCell align="left"></StyledTableCell>
+                  <StyledTableCell align="left">
+                    this is my Data
+                  </StyledTableCell>
+                </TableRow>
+                <TableRow>
+                  <StyledTableCell align="left">Data :</StyledTableCell>
+                  <StyledTableCell align="left"></StyledTableCell>
+                  <StyledTableCell align="left"></StyledTableCell>
+                  <StyledTableCell align="left">
+                    this is my Data
+                  </StyledTableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer> */}
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell>Dessert (100g serving)</StyledTableCell>
+                    <StyledTableCell align="right">Calories</StyledTableCell>
+                    <StyledTableCell align="right">
+                      Fat&nbsp;(g)
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      Carbs&nbsp;(g)
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      Protein&nbsp;(g)
+                    </StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {rows.map((row) => (
+                    <StyledTableRow key={row.name}>
+                      <StyledTableCell component="th" scope="row">
+                        {row.name}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {row.calories}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">{row.fat}</StyledTableCell>
+                      <StyledTableCell align="right">
+                        {row.carbs}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {row.protein}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          {/* </div>
+        </div> */}
+      </Box>
+    </Grid>
   );
 }

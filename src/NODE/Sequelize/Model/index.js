@@ -22,6 +22,9 @@ db.userData= require('./dataInsert')(Connection,DataTypes)
 
     //All RELATIONS
 db.User.hasOne(db.userData,{foreignKey:'dataID', as :'UserData'})
-db.userData.belongsTo(db.User,{foreignKey:'dataID', as :'User'})
+db.userData.belongsTo(db.User,{foreignKey:'dataID', as :'UserInformation'})
+
+db.User.hasMany(db.userData,{foreignKey:'dataID', as:'UserInfo'})
+db.userData.belongsTo(db.User,{foreignKey:'dataID', as :'UserInfo'})
 
 module.exports= db

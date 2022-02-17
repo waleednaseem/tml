@@ -152,7 +152,7 @@ export default function MainPage(props) {
 
   function logout() {
     localStorage.clear();
-    history("/");
+    history("/login");
   }
 
   return (

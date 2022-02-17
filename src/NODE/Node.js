@@ -15,8 +15,9 @@ App.post('/Register', ctrl.makeUser)
 App.post('/login',ctrl.Login)
 App.post('/insertdata',ctrl.insertData)
 App.post('/location',ctrl.findCountry)
-App.post('/ShowAllData',ctrl.AllData)
+// App.post('/ShowAllData',ctrl.AllData)
 App.post('/SearchByConsignee',ctrl.searchConsignee)
+App.post('/history',ctrl.history)
 
 
 App.listen(port, () => {

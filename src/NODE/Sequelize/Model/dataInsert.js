@@ -1,74 +1,99 @@
-module.exports=(Connection,DataTypes)=>{
-    const data = Connection.define('userData',{
-        order_from_country:{
+const moment=require('moment')
+module.exports = (Connection, DataTypes) => {
+    const data = Connection.define('userData', {
+        order_from_country: {
             type: DataTypes.STRING,
-            allowNull: false    
+            allowNull: false
         },
-        shipAddr:{
+        Username: {
             type: DataTypes.STRING,
-            allowNull: false    
+            allownull: false
         },
-        shipTell:{
+        shipName: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        shipAddr: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        shipTell: {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        shipEmail:{
+        shipEmail: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        shipPic:{
+        shipPic: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        consAddr:{
+        consName: {
             type: DataTypes.STRING,
-            allowNull: false    
+            allowNull: false
         },
-        consTell:{
+        consAddr: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        consTell: {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        consEmail:{
+        consEmail: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        consPic:{
+        consPic: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        competition:{
+        competition: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        volume:{
+        volume: {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        port_of_loading:{
+        port_of_loading: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        port_of_discharge:{
+        port_of_discharge: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        final_destination:{
+        final_destination: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        comodities:{
+        comodities: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        freight_term:{
+        freight_term: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        remark:{
+        remark: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        
+        createdAt: {
+            type: DataTypes.DATE,                  
+            get() {
+                return moment(this.getDataValue('createdAt')).format('DD/MM/YYYY h:mm:ss');
+            }
+        },
+        updatedAt: {
+            type: DataTypes.DATE,
+            get() {
+                return moment(this.getDataValue('updatedAt')).format('DD/MM/YYYY h:mm:ss');
+            }
+        }
+
     })
     return data
 }

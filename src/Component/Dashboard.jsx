@@ -11,16 +11,61 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import jwt from "jwt-decode";
 
 export default function Dashboard() {
+
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+  
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
+  
+  function createData(name, calories, fat, carbs, protein) {
+    return { name, calories, fat, carbs, protein };
+  }
+  
+  const rows = [
+    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+    createData('Eclair', 262, 16.0, 24, 6.0),
+    createData('Cupcake', 305, 3.7, 67, 4.3),
+    createData('Gingerbread', 356, 16.0, 49, 3.9),
+  ];
+  
+
   const data = useSelector((state) => {
     return state;
   });
   // console.log(data.country)
+  const [shipName, setShipName] = useState("");
   const [shipAddr, setShipAddr] = useState("");
   const [shipTell, setShipTell] = useState("");
   const [shipEmail, setShipEmail] = useState("");
   const [shipPic, setShipPic] = useState("");
+  const [consName, setConsName] = useState("");
   const [consAddr, setConsAddr] = useState("");
   const [consTell, setConsTell] = useState("");
   const [consEmail, setConsEmail] = useState("");
@@ -54,6 +99,8 @@ export default function Dashboard() {
   const ConstantCommodity = useRef(null);
   const Constantfreight = useRef(null);
   const ConstantRemark = useRef(null);
+  const ConstanShipName = useRef(null);
+  const ConstantconsName = useRef(null);
 
   const logindata = localStorage.getItem("Login");
 
@@ -61,21 +108,25 @@ export default function Dashboard() {
 
   const dispatch = useDispatch();
   const pdfviewer = () => {
-    const openWindow = window.open();
-    openWindow.document.write(`<!DOCTYPE>
-        ${ReactDOMServer.renderToStaticMarkup(<Pdf data={pdfdata} />)}`);
+    // const openWindow = window.open();
+    // openWindow.document.write(`<!DOCTYPE>
+    //     ${ReactDOMServer.renderToStaticMarkup(<Pdf data={pdfdata} />)}`);
+    <Pdf data={pdfdata}/>
   };
-
+  // console.log(data.userdata.Username)
   const SendData = (e) => {
     e.preventDefault();
     logindata
       ? axios
           .post("http://localhost:4000/insertdata", {
             order_from_country: data.country,
+            Username: data.userdata.Username,
+            shipName: shipName,
             shipAddr: shipAddr,
             shipTell: shipTell,
             shipEmail: shipEmail,
             shipPic: shipPic,
+            consName: consName,
             consAddr: consAddr,
             consTell: consTell,
             consEmail: consEmail,
@@ -112,6 +163,8 @@ export default function Dashboard() {
             ConstantCommodity.current.value = "";
             Constantfreight.current.value = "";
             ConstantRemark.current.value = "";
+            ConstanShipName.current.value = "";
+            ConstantconsName.current.value = "";
           })
           .catch((err) => console.log(err))
       : toast.error("Your not logged in", {
@@ -143,6 +196,19 @@ export default function Dashboard() {
                 SHIPPER
               </Typography>
 
+              <TextField
+                inputRef={ConstanShipName}
+                variant="standard"
+                style={{ margin: "10px" }}
+                required
+                id="ShipName"
+                label="Shipper Name"
+                name="ShipName"
+                autoComplete="ShipName"
+                // Value={shipAddr}
+                onChange={(e) => setShipName(e.target.value)}
+                autoFocus
+              />
               <TextField
                 inputRef={ConstanShipAddr}
                 variant="standard"
@@ -200,6 +266,19 @@ export default function Dashboard() {
               <Typography component="h4" variant="h5">
                 CONSINGEE
               </Typography>
+              <TextField
+                inputRef={ConstantconsName}
+                style={{ margin: "10px" }}
+                variant="standard"
+                // margin="normal"
+                required
+                id="consName"
+                label="Consignee Name"
+                name="consName"
+                autoComplete="consName"
+                onChange={(e) => setConsName(e.target.value)}
+                autoFocus
+              />
               <TextField
                 inputRef={ConstantconsAddr}
                 style={{ margin: "10px" }}
@@ -355,6 +434,7 @@ export default function Dashboard() {
                 </Typography>
                 <TextField
                   placeholder="Remark"
+                  // variant="standard"
                   inputRef={ConstantRemark}
                   multiline
                   rows={8}
@@ -376,6 +456,7 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
+          
         </Box>
       </Grid>
     </div>

@@ -43,10 +43,13 @@ const insertData = async (req, res) => {
 
     const data = {
         order_from_country: req.body.order_from_country,
+        Username: req.body.Username,
+        shipName: req.body.shipName,
         shipAddr: req.body.shipAddr,
         shipTell: req.body.shipTell,
         shipEmail: req.body.shipEmail,
         shipPic: req.body.shipPic,
+        consName: req.body.consName,
         consAddr: req.body.consAddr,
         consTell: req.body.consTell,
         consEmail: req.body.consEmail,
@@ -86,19 +89,27 @@ const insertData = async (req, res) => {
     const insertDatas = await userData.findOne({ where: Cdata })
 
     if (insertDatas) {
-        res.json(`Data is already inserted from ${insertDatas.order_from_country} at ${insertDatas.createdAt}`)
+        res.json(`Data is already inserted from ${insertDatas.Username} ${insertDatas.order_from_country} at ${insertDatas.createdAt}`)
     } else {
         await userData.create(data)
         res.status(200).json({ msg: 'Data inserted', data })
     }
     // res.send(insertDatas)
 }
-const AllData = async (req, res) => {
-    const data = await userData.findAll({})
-    res.send(data)
+// const userinfo = await User.findOne({where:{id:req.body.id}})
+const history = async (req, res) => {
+    const admin = await User.findOne({ where: { Username: req.body.Username } })
+    const adminRole = await userData.findAll({})
+    const userRole = await userData.findAll({ where: { Username: req.body.Username } })
+    
+    admin.Username === 'admin' ? res.json(adminRole) : res.json(userRole)
 }
+// const AllData = async (req, res) => {
+//     const data = await userData.findAll({})
+//     res.send(data)
+// }
 const searchConsignee = async (req, res) => {
-    const data = await userData.findAll({ where: { consPic: req.body.consPic } })
+    const data = await userData.findAll({ where: { consName: req.body.consName } })
     res.send(data)
 }
 module.exports = {
@@ -106,6 +117,7 @@ module.exports = {
     Login,
     insertData,
     findCountry,
-    AllData,
-    searchConsignee
+    // AllData,
+    searchConsignee,
+    history
 }
