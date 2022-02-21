@@ -12,9 +12,26 @@ const User = db.User
 const userData = db.userData
 
 const makeUser = async (req, res) => {
-    const body = req.body
-    await User.create(body)
-    res.send('inserted')
+    const credentials = { Username: req.body.Username }
+    const user = { Username: req.body.Username, Password: req.body.Password }
+    const findUser=  await User.findOne({where:credentials})
+    if(!findUser){
+        await User.create(user)
+        res.send('User Created')
+    }else{
+        res.send('User Found')
+    }
+}
+const updateUser =async(req,res)=>{
+    const credentials = { Username: req.body.Username }
+    const user = { Username: req.body.Username, Password: req.body.Password }
+    const findUser=  await User.findOne({where:credentials})
+    if(findUser){
+        await User.update(user,{where:credentials})
+        res.send('User Updated')
+    }else{
+        res.send('User not Found')
+    }
 }
 const Login = async (req, res) => {
     const credentials = { Username: req.body.Username, Password: req.body.Password }
@@ -117,7 +134,7 @@ module.exports = {
     Login,
     insertData,
     findCountry,
-    // AllData,
+    updateUser,
     searchConsignee,
     history
 }

@@ -38,7 +38,7 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function SignInSide() {
+export default function Login() {
   // const data = useSelector((state) => {
   //   return state;
   // });
@@ -49,9 +49,8 @@ export default function SignInSide() {
   const [password, setpassword] = useState("");
 
   const login = () => {
-    dispatch(LoginNow({name,password}, (status) => {
-      // if(status)
-       navigate("/")
+    dispatch(LoginNow({name,password},(status)=>{
+      navigate("/history")
     }))
   }
   

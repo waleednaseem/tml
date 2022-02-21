@@ -18,27 +18,14 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import LineStyleIcon from "@mui/icons-material/LineStyle";
 import HistoryIcon from "@mui/icons-material/History";
-import MailIcon from "@mui/icons-material/Mail";
 import { useSelector, useDispatch } from "react-redux";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Grid from "@mui/material/Grid";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import axios from "axios";
-import { TextareaAutosize } from "@mui/material";
-import { currentCountry } from "../Redux/Action";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, Navigate, Link } from "react-router-dom";
-import Login from "../LoginRegister/Login";
-// import List from '@mui/material/List';
-// import ListItem from '@mui/material/ListItem';
-import ListItemButton from "@mui/material/ListItemButton";
-// import ListItemIcon from '@mui/material/ListItemIcon';
-import ReactDOMServer from "react-dom/server";
 import jwt from "jwt-decode";
-import Dashboard from "./Dashboard";
 import logo from "../Assets/logo.png";
 
 const drawerWidth = 240;
@@ -109,8 +96,12 @@ export default function MainPage(props) {
 
   const [Country, setCountry] = useState("");
 
+  // const loginAdmin = localStorage.getItem('Login')
+
   const impData = async () => {
     const logindata = localStorage.getItem("Login");
+    // const check =  jwt(logindata)
+    // console.log(check.user.Username)
     const DATA = jwt(logindata);
     await dispatch({
       type: "user_id",
@@ -203,18 +194,31 @@ export default function MainPage(props) {
         </DrawerHeader>
         <Divider />
         <List>
-          <ListItem button onClick={() => history("/")}>
+          {
+            DATA.user.Username ==="admin"?
+            null:
+            <ListItem button onClick={() => history("/")}>
             <ListItemIcon>
               <LineStyleIcon />
             </ListItemIcon>
-            <ListItemText primary="Dashboard" />
+            <ListItemText primary="Dashboard" />r
           </ListItem>
+          }
           <ListItem button onClick={() => history("/history")}>
             <ListItemIcon>
               <HistoryIcon />
             </ListItemIcon>
             <ListItemText primary="History" />
           </ListItem>
+          {
+            DATA.user.Username ==="admin" &&
+            <ListItem button onClick={() => history("/register")}>
+            <ListItemIcon>
+              <GroupAddIcon />
+            </ListItemIcon>
+            <ListItemText primary="Register User" />
+          </ListItem>
+          }
         </List>
         <Divider />
 

@@ -12,6 +12,7 @@ App.use(express.urlencoded({ extended: true }));
 App.use(express.json())
 
 App.post('/Register', ctrl.makeUser)
+App.post('/update', ctrl.updateUser)
 App.post('/login',ctrl.Login)
 App.post('/insertdata',ctrl.insertData)
 App.post('/location',ctrl.findCountry)
