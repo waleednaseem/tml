@@ -1,5 +1,5 @@
 const { Sequelize, DataTypes } = require('sequelize')
-const Connection= new Sequelize('tml','root','',{
+const Connection= new Sequelize('go2tml_crm_db','root','',{
     host:'localhost',
     dialect:'mysql',
 })
